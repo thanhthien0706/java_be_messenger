@@ -30,7 +30,7 @@ public class BaseEntity {
     private Date updateAt;
 
     @Column
-    private boolean deleted = Boolean.FALSE;
+    private Boolean deleted = Boolean.FALSE;
 
     @Column
     private Date deleteAt;

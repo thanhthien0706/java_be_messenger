@@ -6,54 +6,79 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserEntity extends BaseEntity {
+
+    public UserEntity(String username2, String email2, String encode) {
+        this.username = username2;
+        this.email = email2;
+        this.password = encode;
+    }
+
     @Column
+    // @NotBlank
     private String username;
 
     @Column
     private String fullName;
 
     @Column
-    private String avatar;
+    @Lob
+    private String avatar = "https://res.cloudinary.com/dd1yamek1/image/upload/v1665204147/web_messenger/download_zbxrqz.png";
 
     @Column
     private String email;
 
     @Column
+    // @NotBlank
     private String phone;
 
     @Column
-    private String password;
+    private boolean active = true;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    private UserProfileEntity userProfile;
+    @Column
+    @JsonIgnore
+    // @NotBlank
+    @Size(min = 8, max = 100)
+    private String password;
 
     @ManyToOne
     @JoinColumn(name = "role_id", insertable = false, updatable = false)
     private RoleEntity role;
 
-    @OneToMany(mappedBy = "friendRequester", fetch = FetchType.LAZY)
-    private List<FriendEntity> myFriends;
+    @ManyToMany(mappedBy = "userContacts")
+    List<ContactEntity> contacts;
 
-    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
-    private List<RoomEntity> myRooms;
+    @OneToMany(mappedBy = "userCreator", fetch = FetchType.LAZY)
+    private List<ConversationEntity> conversations;
 
-    @OneToMany(mappedBy = "user")
-    private List<PartacipantEntity> partacipants;
+    @OneToMany(mappedBy = "conversation", fetch = FetchType.LAZY)
+    private List<MessageEntity> sender;
 
-    @OneToMany(mappedBy = "creator")
-    private List<MessageEntity> messages;
+    @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
+    private List<NotifiAddfriendEnity> notifiReceivers;
 
-    @OneToMany(mappedBy = "recipient")
-    private List<MessageRecipientEntity> messageRecipients;
+    @OneToMany(mappedBy = "requester", fetch = FetchType.LAZY)
+    private List<NotifiAddfriendEnity> notifiRequesters;
+
+    @OneToMany(mappedBy = "receiver")
+    private List<NotifiTextEntity> notifiTexts;
 }
