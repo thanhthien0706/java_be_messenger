@@ -10,6 +10,7 @@ import com.messenger.java_be_web_messenger.entities.enum_type.RoleName;
 
 @Repository
 public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
-    Optional<RoleEntity> findByName(String name);
+    RoleEntity findOneByName(String name);
 
+    RoleEntity findOneById(Long id);
 }

@@ -11,7 +11,7 @@ import com.messenger.java_be_web_messenger.entities.UserEntity;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByUsername(String username);
 
-    Optional<UserEntity> findById(Long id);
+    UserEntity findOneById(Long id);
 
     Boolean existsByUsername(String username);
 

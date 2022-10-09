@@ -27,14 +27,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserEntity extends BaseEntity {
 
-    public UserEntity(String username2, String email2, String encode) {
-        this.username = username2;
-        this.email = email2;
-        this.password = encode;
-    }
-
     @Column
-    // @NotBlank
+    @NotBlank
     private String username;
 
     @Column
@@ -45,10 +39,11 @@ public class UserEntity extends BaseEntity {
     private String avatar = "https://res.cloudinary.com/dd1yamek1/image/upload/v1665204147/web_messenger/download_zbxrqz.png";
 
     @Column
+    @NotBlank
     private String email;
 
     @Column
-    // @NotBlank
+    @NotBlank
     private String phone;
 
     @Column
@@ -56,12 +51,12 @@ public class UserEntity extends BaseEntity {
 
     @Column
     @JsonIgnore
-    // @NotBlank
+    @NotBlank
     @Size(min = 8, max = 100)
     private String password;
 
     @ManyToOne
-    @JoinColumn(name = "role_id", insertable = false, updatable = false)
+    @JoinColumn(name = "role_id")
     private RoleEntity role;
 
     @ManyToMany(mappedBy = "userContacts")
