@@ -26,12 +26,12 @@ public class JwtProvider {
 
     private final long JWT_EXPIRATION = 6 * 30 * 24 * 60 * 60 * 100L;
 
-    private String generateToken(CustomUserDetails customUserDetails) {
+    public String generateToken(CustomUserDetails customUserDetails) {
         Date now = new Date();
         Date expiration = new Date(now.getTime() + JWT_EXPIRATION);
-
+        // getUsername()
         return Jwts.builder()
-                .setSubject(customUserDetails.getUsername())
+                .setSubject(customUserDetails.getUser().getId().toString())
                 .setIssuedAt(now)
                 .setExpiration(expiration)
                 .signWith(SignatureAlgorithm.HS512, secretKey)
