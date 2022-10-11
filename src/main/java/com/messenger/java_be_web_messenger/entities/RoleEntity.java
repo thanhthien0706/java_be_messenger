@@ -4,15 +4,10 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.NaturalId;
-
-import com.messenger.java_be_web_messenger.entities.enum_type.RoleName;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

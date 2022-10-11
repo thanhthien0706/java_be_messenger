@@ -70,7 +70,7 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password")
-    private ResponseEntity<ResponseObject> resetPassword(HttpServletRequest request,
+    private ResponseEntity<ResponseObject> resetPassword(@RequestParam("url_fe") String baseUrl,
             @RequestParam("email") String userEmail) {
         UserEntity user = userService.findOneByEmail(userEmail);
         String text;
@@ -84,8 +84,9 @@ public class AuthController {
         Boolean createTokenReset = userService.createPasswordResetTokenForUser(user, token);
 
         if (createTokenReset) {
-            String baseUrl = ServletUriComponentsBuilder.fromRequestUri(request).replacePath(null).build()
-                    .toUriString();
+            // String baseUrl =
+            // ServletUriComponentsBuilder.fromRequestUri(request).replacePath(null).build()
+            // .toUriString();
             statusSendMail = userService.structSendMailResetPassword(baseUrl, token, user);
 
             if (statusSendMail) {

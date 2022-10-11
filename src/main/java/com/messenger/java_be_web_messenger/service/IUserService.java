@@ -1,8 +1,10 @@
 package com.messenger.java_be_web_messenger.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.messenger.java_be_web_messenger.dto.SignUpDTO;
+import com.messenger.java_be_web_messenger.dto.UserDTO;
 import com.messenger.java_be_web_messenger.entities.UserEntity;
 import com.messenger.java_be_web_messenger.form.SignInForm;
 import com.messenger.java_be_web_messenger.form.SignUpForm;
@@ -27,4 +29,8 @@ public interface IUserService {
     UserEntity getUserByPasswordResetToken(String token);
 
     Boolean changeUserPassword(UserEntity user, String newPassword);
+
+    List<UserDTO> searchUsers(String email, String phone);
+
+    boolean existsById(Long id);
 }

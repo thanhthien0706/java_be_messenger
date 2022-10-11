@@ -1,6 +1,7 @@
 package com.messenger.java_be_web_messenger.service.impl;
 
 import java.util.Calendar;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.messenger.java_be_web_messenger.convert.UserConvert;
 import com.messenger.java_be_web_messenger.dto.EmailDetails;
 import com.messenger.java_be_web_messenger.dto.SignUpDTO;
+import com.messenger.java_be_web_messenger.dto.UserDTO;
 import com.messenger.java_be_web_messenger.entities.PasswordResetTokenEntity;
 import com.messenger.java_be_web_messenger.entities.RoleEntity;
 import com.messenger.java_be_web_messenger.entities.UserEntity;
@@ -188,6 +190,24 @@ public class UserService implements IUserService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<UserDTO> searchUsers(String email, String phone) {
+        if (email == null && phone != null) {
+            return userConvert.toListDto(userRepository.findLikeByPhone(phone));
+        } else if (email != null && phone == null) {
+            return userConvert.toListDto(userRepository.findLikeByEmail(email));
+        } else if (email == null && phone == null) {
+            return userConvert.toListDto(userRepository.findLikeByEmailAndPhone(email, phone));
+        } else {
+            return userConvert.toListDto(userRepository.findAll());
+        }
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return userRepository.existsById(id);
     }
 
 }
