@@ -13,15 +13,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.messenger.java_be_web_messenger.convert.UserConvert;
+import com.messenger.java_be_web_messenger.dto.NotifiAddFriendDTO;
+import com.messenger.java_be_web_messenger.dto.NotifiTextDTO;
 import com.messenger.java_be_web_messenger.dto.UserDTO;
 import com.messenger.java_be_web_messenger.entities.NotifiAddfriendEnity;
 import com.messenger.java_be_web_messenger.entities.UserEntity;
 import com.messenger.java_be_web_messenger.form.NotifiAddFriendForm;
+import com.messenger.java_be_web_messenger.form.NotifiTextForm;
 import com.messenger.java_be_web_messenger.form.ResponseObject;
 import com.messenger.java_be_web_messenger.jwt.JwtProvider;
 import com.messenger.java_be_web_messenger.jwt.JwtTokenFilter;
@@ -62,15 +66,29 @@ public class FriendController {
 
     @PostMapping("/add-friend")
     private ResponseEntity<ResponseObject> handleAddFriend(HttpServletRequest req,
-            @RequestAttribute NotifiAddFriendForm addfriendForm) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null) {
-            if (userService.existsById(addfriendForm.getReceiver_id())) {
-                Long id_requester = jwtProvider.getUserIdFromToken(jwtTokenFilter.getToken(req));
-                addfriendForm.setRequester_id(id_requester);
+            @RequestBody NotifiAddFriendForm addfriendForm) {
+        if (userService.existsById(addfriendForm.getReceiver_id())) {
+            Long id_requester = jwtProvider.getUserIdFromToken(jwtTokenFilter.getToken(req));
+            UserEntity userEntity = userService.findById(id_requester)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            addfriendForm.setRequester_id(id_requester);
+
+            if (id_requester != null) {
+                NotifiAddFriendDTO resultNotifiAddFriend = notifiAddFriendService.save(addfriendForm);
+
+                if (resultNotifiAddFriend != null) {
+                    NotifiTextForm textFrom = new NotifiTextForm(userEntity.getFullName() + " gui loi moi ket ban",
+                            addfriendForm.getReceiver_id());
+                    NotifiTextDTO rsNotifiTextDto = notifiTextService.save(textFrom);
+
+                    return ResponseEntity.status(HttpStatus.OK)
+                            .body(new ResponseObject(true, "Addfriend sucessfully", ""));
+                }
             }
+
         }
-        return ResponseEntity.status(HttpStatus.NON_AUTHORITATIVE_INFORMATION)
-                .body(new ResponseObject(false, "User is not logged in", ""));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject(false, "Addfriend Faild", ""));
     }
 }

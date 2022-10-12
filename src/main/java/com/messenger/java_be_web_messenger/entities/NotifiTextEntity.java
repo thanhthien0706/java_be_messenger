@@ -20,6 +20,6 @@ public class NotifiTextEntity extends BaseEntity {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "receiver_id", insertable = false, updatable = false)
+    @JoinColumn(name = "receiver_id")
     private UserEntity receiver;
 }

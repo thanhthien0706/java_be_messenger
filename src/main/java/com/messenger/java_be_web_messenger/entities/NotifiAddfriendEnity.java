@@ -20,10 +20,10 @@ public class NotifiAddfriendEnity extends BaseEntity {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "receiver_id", insertable = false, updatable = false)
+    @JoinColumn(name = "receiver_id")
     private UserEntity receiver;
 
     @ManyToOne
-    @JoinColumn(name = "requester_id", insertable = false, updatable = false)
+    @JoinColumn(name = "requester_id")
     private UserEntity requester;
 }

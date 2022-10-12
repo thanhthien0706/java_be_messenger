@@ -10,6 +10,10 @@ import com.messenger.java_be_web_messenger.form.SignInForm;
 import com.messenger.java_be_web_messenger.form.SignUpForm;
 
 public interface IUserService {
+    UserEntity findOneById(Long id);
+
+    Optional<UserEntity> findById(Long id);
+
     UserEntity findOneByEmail(String email);
 
     Boolean existsByEmail(String email);

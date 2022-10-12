@@ -28,6 +28,11 @@ public class UserConvert {
         return userDto;
     }
 
+    public UserDTO toDTOUser(UserEntity user) {
+        UserDTO userDto = modelMapper.map(user, UserDTO.class);
+        return userDto;
+    }
+
     public List<UserDTO> toListDto(List<UserEntity> listUser) {
         List<UserDTO> list_user_dto = new ArrayList();
         for (UserEntity user : listUser) {

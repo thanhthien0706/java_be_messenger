@@ -2,6 +2,7 @@ package com.messenger.java_be_web_messenger.service.impl;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
@@ -208,6 +209,16 @@ public class UserService implements IUserService {
     @Override
     public boolean existsById(Long id) {
         return userRepository.existsById(id);
+    }
+
+    @Override
+    public UserEntity findOneById(Long id) {
+        return userRepository.findOneById(id);
+    }
+
+    @Override
+    public Optional<UserEntity> findById(Long id) {
+        return userRepository.findById(id);
     }
 
 }
