@@ -194,16 +194,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<UserDTO> searchUsers(String email, String phone) {
-        if (email == null && phone != null) {
-            return userConvert.toListDto(userRepository.findLikeByPhone(phone));
-        } else if (email != null && phone == null) {
-            return userConvert.toListDto(userRepository.findLikeByEmail(email));
-        } else if (email == null && phone == null) {
-            return userConvert.toListDto(userRepository.findLikeByEmailAndPhone(email, phone));
-        } else {
-            return userConvert.toListDto(userRepository.findAll());
+    public List<UserDTO> searchUsers(String text_search) {
+        if (text_search != null && text_search != "") {
+            return userConvert.toListDto(userRepository.findLikeByEmailAndPhone(text_search));
         }
+        return null;
+
     }
 
     @Override

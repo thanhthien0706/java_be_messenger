@@ -56,12 +56,13 @@ public class FriendController {
     JwtTokenFilter jwtTokenFilter;
 
     @GetMapping
-    private ResponseEntity<ResponseObject> searchUserByEmailAndPhone(
-            @RequestParam(name = "email", required = false) String email,
-            @RequestParam(name = "phone", required = false) String phone) {
-        List<UserDTO> listUser = userService.searchUsers(email, phone);
+    private ResponseEntity<ResponseObject> searchUser(
+            @RequestParam(name = "text_search", required = false) String text_search) {
 
-        return ResponseEntity.ok(new ResponseObject(true, "Search User ", listUser));
+        List<UserDTO> listUser = userService.searchUsers(text_search);
+        Boolean status = listUser != null ? true : false;
+
+        return ResponseEntity.ok(new ResponseObject(status, "Search User ", listUser));
     }
 
     @PostMapping("/add-friend")

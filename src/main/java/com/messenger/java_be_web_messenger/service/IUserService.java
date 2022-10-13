@@ -34,7 +34,7 @@ public interface IUserService {
 
     Boolean changeUserPassword(UserEntity user, String newPassword);
 
-    List<UserDTO> searchUsers(String email, String phone);
+    List<UserDTO> searchUsers(String text_search);
 
     boolean existsById(Long id);
 }
