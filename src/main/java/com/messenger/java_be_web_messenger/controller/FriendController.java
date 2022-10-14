@@ -75,6 +75,9 @@ public class FriendController {
 
             addfriendForm.setRequester_id(id_requester);
 
+            addfriendForm
+                    .setDescription("Xin chào, tôi là " + userEntity.getFullName() + " muốn được kết bạn với bạn!");
+
             if (id_requester != null) {
                 NotifiAddFriendDTO resultNotifiAddFriend = notifiAddFriendService.save(addfriendForm);
 

@@ -28,22 +28,18 @@ import lombok.NoArgsConstructor;
 public class UserEntity extends BaseEntity {
 
     @Column
-    @NotBlank
     private String username;
 
     @Column
     private String fullName;
 
     @Column
-    @Lob
-    private String avatar = "https://res.cloudinary.com/dd1yamek1/image/upload/v1665204147/web_messenger/download_zbxrqz.png";
+    private String avatar;
 
     @Column
-    @NotBlank
     private String email;
 
     @Column
-    @NotBlank
     private String phone;
 
     @Column
@@ -51,8 +47,6 @@ public class UserEntity extends BaseEntity {
 
     @Column
     @JsonIgnore
-    @NotBlank
-    @Size(min = 8, max = 100)
     private String password;
 
     @ManyToOne

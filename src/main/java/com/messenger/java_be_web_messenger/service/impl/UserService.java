@@ -71,12 +71,15 @@ public class UserService implements IUserService {
         if (!hasEmail && !hasPhone && !hasUsername) {
             UserEntity user = userConvert.toEntity(userInfor);
             user.setPassword(passwordEncoder.encode(userInfor.getPassword()));
-            if (userInfor.getAvatar() != null || !userInfor.getAvatar().isEmpty()) {
+            if (userInfor.getAvatar() != null) {
                 String urlImg = storageService.storageFile(userInfor.getAvatar());
                 user.setAvatar(urlImg);
+            } else {
+                user.setAvatar(
+                        "https://res.cloudinary.com/dd1yamek1/image/upload/v1665718619/web_messenger/user_x1slpc.jpg");
             }
 
-            RoleEntity role = roleRepository.findOneByName(userInfor.getRoleName());
+            RoleEntity role = roleRepository.findOneByName("ROLE_USER");
             if (role != null) {
                 user.setRole(role);
             }
