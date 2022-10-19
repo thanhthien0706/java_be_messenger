@@ -220,4 +220,9 @@ public class UserService implements IUserService {
         return userRepository.findById(id);
     }
 
+    @Override
+    public UserDTO getMe(Long id) {
+        return userConvert.toDTOUser(userRepository.findOneById(id));
+    }
+
 }

@@ -37,4 +37,6 @@ public interface IUserService {
     List<UserDTO> searchUsers(String text_search);
 
     boolean existsById(Long id);
+
+    UserDTO getMe(Long id);
 }
