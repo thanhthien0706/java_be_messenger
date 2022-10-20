@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,24 +71,29 @@ public class AuthController {
     }
 
     @PostMapping("/reset-password")
-    private ResponseEntity<ResponseObject> resetPassword(@RequestParam("url_fe") String baseUrl,
+    private ResponseEntity<ResponseObject> resetPassword(HttpServletRequest req,
             @RequestParam("email") String userEmail) {
+
+        System.out.println(userEmail);
         UserEntity user = userService.findOneByEmail(userEmail);
         String text;
         Boolean status;
         Boolean statusSendMail;
 
         if (user == null) {
-            throw new UsernameNotFoundException("User not found");
+            throw new UsernameNotFoundException("User not found ");
         }
         String token = UUID.randomUUID().toString();
-        Boolean createTokenReset = userService.createPasswordResetTokenForUser(user, token);
+        Boolean createTokenReset = userService.createPasswordResetTokenForUser(user,
+                token);
 
         if (createTokenReset) {
-            // String baseUrl =
+            String baseUrl = req.getScheme() + "://" + req.getHeader("Host");
+            //
             // ServletUriComponentsBuilder.fromRequestUri(request).replacePath(null).build()
             // .toUriString();
-            statusSendMail = userService.structSendMailResetPassword(baseUrl, token, user);
+            statusSendMail = userService.structSendMailResetPassword(baseUrl, token,
+                    user);
 
             if (statusSendMail) {
                 text = "Send mail reset password successfully";
@@ -101,8 +107,10 @@ public class AuthController {
             status = false;
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(status, text, ""));
-
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(status,
+                text, ""));
+        // return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(true,
+        // "url", req.getScheme() + "://" + req.getHeader("Host")));
     }
 
     @GetMapping("/changePassword")

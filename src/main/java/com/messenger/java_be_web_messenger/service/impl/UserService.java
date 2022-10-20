@@ -145,7 +145,7 @@ public class UserService implements IUserService {
     public Boolean structSendMailResetPassword(String baseUrl, String token, UserEntity user) {
         Boolean statusSend = true;
 
-        String url = baseUrl + "/api/v1/auth/changePassword?token=" + token;
+        String url = baseUrl + "/quen-mat-khau?token=" + token;
 
         EmailDetails emailDetails = new EmailDetails(user.getEmail(), "Email reset password. Click link: " + url,
                 "RESET PASSWORD", null);
