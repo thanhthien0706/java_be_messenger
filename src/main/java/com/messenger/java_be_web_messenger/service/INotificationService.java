@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.messaging.handler.annotation.SendTo;
 
+import com.messenger.java_be_web_messenger.dto.NotificationDTO;
 import com.messenger.java_be_web_messenger.form.NotificationForm;
 
 public interface INotificationService {
@@ -16,6 +17,6 @@ public interface INotificationService {
 
     List<String> getAllUser();
 
-    NotificationForm testNotifi(NotificationForm notificationForm);
+    NotificationDTO testNotifi(NotificationForm notificationForm);
 
 }

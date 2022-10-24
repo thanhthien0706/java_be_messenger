@@ -1,5 +1,8 @@
 package com.messenger.java_be_web_messenger.convert;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,10 +25,16 @@ public class NotifiAddFriendConvert {
 
     public NotifiAddFriendDTO toDTO(NotifiAddfriendEnity notifiAddfriendEnity) {
         NotifiAddFriendDTO result = modelMapper.map(notifiAddfriendEnity, NotifiAddFriendDTO.class);
-        result.setReceiver(userConvert.toDTOUser(notifiAddfriendEnity.getReceiver()));
         result.setRequester(userConvert.toDTOUser(notifiAddfriendEnity.getRequester()));
 
         return result;
     }
 
+    public List<NotifiAddFriendDTO> toListDto(List<NotifiAddfriendEnity> listNotifiFriend) {
+        List<NotifiAddFriendDTO> result = new ArrayList<>();
+        for (NotifiAddfriendEnity item : listNotifiFriend) {
+            result.add(toDTO(item));
+        }
+        return result;
+    }
 }

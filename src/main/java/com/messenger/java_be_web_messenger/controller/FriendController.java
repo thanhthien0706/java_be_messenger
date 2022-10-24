@@ -1,5 +1,6 @@
 package com.messenger.java_be_web_messenger.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,7 +66,7 @@ public class FriendController {
     private ResponseEntity<ResponseObject> searchUser(HttpServletRequest req,
             @RequestParam(name = "text_search", required = false) String text_search) {
         Long id_requester = jwtProvider.getUserIdFromToken(jwtTokenFilter.getToken(req));
-        System.out.println("Nguoi gui:" + id_requester.toString(0));
+        System.out.println("Nguoi gui:" + id_requester.toString());
         List<UserDTO> listUser = userService.searchUsers(text_search, id_requester);
         Boolean status = listUser != null ? true : false;
 
@@ -73,7 +74,6 @@ public class FriendController {
     }
 
     @PostMapping("/add-friend")
-    @MessageMapping("/notifi-addfriend")
     private ResponseEntity<ResponseObject> handleAddFriend(HttpServletRequest req,
             @RequestBody NotifiAddFriendForm addfriendForm) {
         if (userService.existsById(addfriendForm.getReceiver_id())) {
@@ -95,7 +95,8 @@ public class FriendController {
                     NotifiTextDTO rsNotifiTextDto = notifiTextService.save(textFrom);
 
                     if (rsNotifiTextDto != null) {
-                        NotificationForm notificationForm = new NotificationForm(addfriendForm.getReceiver_id(), null,
+                        NotificationForm notificationForm = new NotificationForm(addfriendForm.getReceiver_id(),
+                                id_requester, null,
                                 userEntity.getFullName() + " gui loi moi ket ban", null);
                         notificationService.sendNotifiSpecificUserFromSystem(notificationForm);
                         return ResponseEntity.status(HttpStatus.OK)
@@ -109,4 +110,20 @@ public class FriendController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ResponseObject(false, "Addfriend Faild", ""));
     }
+
+    @GetMapping("/list-addfriend")
+    private ResponseEntity<ResponseObject> getListFriendOfMe(HttpServletRequest req) {
+        Long id_user = jwtProvider.getUserIdFromToken(jwtTokenFilter.getToken(req));
+        List<NotifiAddFriendDTO> result = notifiAddFriendService.getAllFriendOfMe(id_user);
+
+        // if (result != null) {
+        // return ResponseEntity.status(HttpStatus.OK)
+        // .body(new ResponseObject(true, "Get list friend successfully", result));
+        // }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject(false, "Get list friend faild", result));
+
+    }
+
 }

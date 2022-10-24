@@ -1,5 +1,7 @@
 package com.messenger.java_be_web_messenger.service.impl;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,7 +12,9 @@ import org.springframework.messaging.simp.user.SimpUser;
 import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Service;
 
+import com.messenger.java_be_web_messenger.dto.NotificationDTO;
 import com.messenger.java_be_web_messenger.dto.UserDTO;
+import com.messenger.java_be_web_messenger.dto.EnumTypes.Status;
 import com.messenger.java_be_web_messenger.form.NotificationForm;
 import com.messenger.java_be_web_messenger.service.INotificationService;
 
@@ -65,12 +69,20 @@ public class NotificationService implements INotificationService {
     }
 
     @Override
-    public NotificationForm testNotifi(NotificationForm notificationForm) {
+    public NotificationDTO testNotifi(NotificationForm notificationForm) {
         UserDTO user = userService.getMe(notificationForm.getReceiverId());
-        simpMessagingTemplate.convertAndSendToUser(user.getUsername(), "/private-notifi",
-                notificationForm);
+        UserDTO sender = userService.getMe(notificationForm.getSenderId());
 
-        return notificationForm;
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+
+        NotificationDTO notificationDTO = new NotificationDTO(sender.getFullName(), notificationForm.getMessage(),
+                "https://freetuts.net/public/logo/icon.png", Status.ADDFRIEND, dtf.format(now));
+
+        simpMessagingTemplate.convertAndSendToUser(user.getUsername(), "/private-notifi",
+                notificationDTO);
+
+        return notificationDTO;
     }
 
 }

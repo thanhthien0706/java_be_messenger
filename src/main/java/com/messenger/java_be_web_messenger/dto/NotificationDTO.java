@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class NotificationDTO {
     private String username;
     private String content;
-    private String title;
+    private String thumbnail;
     private Status status;
-    private Date date;
+    private String date;
 }

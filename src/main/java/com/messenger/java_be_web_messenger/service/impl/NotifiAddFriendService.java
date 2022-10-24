@@ -1,6 +1,7 @@
 package com.messenger.java_be_web_messenger.service.impl;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,5 +50,12 @@ public class NotifiAddFriendService implements INotifiAddFriend {
         }
 
         return null;
+    }
+
+    @Override
+    public List<NotifiAddFriendDTO> getAllFriendOfMe(Long id) {
+        List<NotifiAddfriendEnity> listNotifiFriend = notifiAddFriendRepository.findByReceiver(id);
+        List<NotifiAddFriendDTO> listResult = notifiAddFriendConvert.toListDto(listNotifiFriend);
+        return listResult;
     }
 }

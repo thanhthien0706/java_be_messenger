@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class NotificationForm {
     private Long receiverId;
+    private Long senderId;
     private String thumbnail;
     private String message;
     private String date;
