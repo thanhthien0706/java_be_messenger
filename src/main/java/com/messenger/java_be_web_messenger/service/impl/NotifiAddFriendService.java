@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.messenger.java_be_web_messenger.convert.NotifiAddFriendConvert;
 import com.messenger.java_be_web_messenger.dto.NotifiAddFriendDTO;
 import com.messenger.java_be_web_messenger.entities.NotifiAddfriendEnity;
-import com.messenger.java_be_web_messenger.entities.UserEntity;
 import com.messenger.java_be_web_messenger.form.NotifiAddFriendForm;
 import com.messenger.java_be_web_messenger.repository.NotifiAddFriendRepository;
 import com.messenger.java_be_web_messenger.service.INotifiAddFriend;

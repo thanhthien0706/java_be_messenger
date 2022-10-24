@@ -25,7 +25,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     boolean existsById(Long id);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM users u WHERE u.email LIKE CONCAT('%',:text_search,'%') OR u.phone LIKE CONCAT('%',:text_search,'%')")
-    List<UserEntity> findLikeByEmailAndPhone(String text_search);
+    @Query(nativeQuery = true, value = "SELECT * FROM users u WHERE (u.email LIKE CONCAT('%',:text_search,'%') OR u.phone LIKE CONCAT('%',:text_search,'%')) AND u.id != :id_requester")
+    List<UserEntity> findLikeByEmailAndPhone(String text_search, Long id_requester);
 
 }

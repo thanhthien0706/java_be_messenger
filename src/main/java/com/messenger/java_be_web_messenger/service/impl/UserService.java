@@ -145,7 +145,7 @@ public class UserService implements IUserService {
     public Boolean structSendMailResetPassword(String baseUrl, String token, UserEntity user) {
         Boolean statusSend = true;
 
-        String url = baseUrl + "/quen-mat-khau?token=" + token;
+        String url = baseUrl + "quen-mat-khau?token=" + token;
 
         EmailDetails emailDetails = new EmailDetails(user.getEmail(), "Email reset password. Click link: " + url,
                 "RESET PASSWORD", null);
@@ -197,9 +197,9 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<UserDTO> searchUsers(String text_search) {
+    public List<UserDTO> searchUsers(String text_search, Long id_requester) {
         if (text_search != null && text_search != "") {
-            return userConvert.toListDto(userRepository.findLikeByEmailAndPhone(text_search));
+            return userConvert.toListDto(userRepository.findLikeByEmailAndPhone(text_search, id_requester));
         }
         return null;
 

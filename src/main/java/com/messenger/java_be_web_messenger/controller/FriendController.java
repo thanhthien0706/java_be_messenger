@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,11 +27,13 @@ import com.messenger.java_be_web_messenger.entities.NotifiAddfriendEnity;
 import com.messenger.java_be_web_messenger.entities.UserEntity;
 import com.messenger.java_be_web_messenger.form.NotifiAddFriendForm;
 import com.messenger.java_be_web_messenger.form.NotifiTextForm;
+import com.messenger.java_be_web_messenger.form.NotificationForm;
 import com.messenger.java_be_web_messenger.form.ResponseObject;
 import com.messenger.java_be_web_messenger.jwt.JwtProvider;
 import com.messenger.java_be_web_messenger.jwt.JwtTokenFilter;
 import com.messenger.java_be_web_messenger.service.impl.NotifiAddFriendService;
 import com.messenger.java_be_web_messenger.service.impl.NotifiTextService;
+import com.messenger.java_be_web_messenger.service.impl.NotificationService;
 import com.messenger.java_be_web_messenger.service.impl.UserService;
 
 @RestController
@@ -55,17 +58,22 @@ public class FriendController {
     @Autowired
     JwtTokenFilter jwtTokenFilter;
 
-    @GetMapping
-    private ResponseEntity<ResponseObject> searchUser(
-            @RequestParam(name = "text_search", required = false) String text_search) {
+    @Autowired
+    NotificationService notificationService;
 
-        List<UserDTO> listUser = userService.searchUsers(text_search);
+    @GetMapping
+    private ResponseEntity<ResponseObject> searchUser(HttpServletRequest req,
+            @RequestParam(name = "text_search", required = false) String text_search) {
+        Long id_requester = jwtProvider.getUserIdFromToken(jwtTokenFilter.getToken(req));
+        System.out.println("Nguoi gui:" + id_requester.toString(0));
+        List<UserDTO> listUser = userService.searchUsers(text_search, id_requester);
         Boolean status = listUser != null ? true : false;
 
         return ResponseEntity.ok(new ResponseObject(status, "Search User ", listUser));
     }
 
     @PostMapping("/add-friend")
+    @MessageMapping("/notifi-addfriend")
     private ResponseEntity<ResponseObject> handleAddFriend(HttpServletRequest req,
             @RequestBody NotifiAddFriendForm addfriendForm) {
         if (userService.existsById(addfriendForm.getReceiver_id())) {
@@ -86,8 +94,14 @@ public class FriendController {
                             addfriendForm.getReceiver_id());
                     NotifiTextDTO rsNotifiTextDto = notifiTextService.save(textFrom);
 
-                    return ResponseEntity.status(HttpStatus.OK)
-                            .body(new ResponseObject(true, "Addfriend sucessfully", ""));
+                    if (rsNotifiTextDto != null) {
+                        NotificationForm notificationForm = new NotificationForm(addfriendForm.getReceiver_id(), null,
+                                userEntity.getFullName() + " gui loi moi ket ban", null);
+                        notificationService.sendNotifiSpecificUserFromSystem(notificationForm);
+                        return ResponseEntity.status(HttpStatus.OK)
+                                .body(new ResponseObject(true, "Addfriend sucessfully", ""));
+                    }
+
                 }
             }
 

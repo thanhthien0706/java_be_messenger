@@ -88,7 +88,7 @@ public class AuthController {
                 token);
 
         if (createTokenReset) {
-            String baseUrl = req.getScheme() + "://" + req.getHeader("Host");
+            String baseUrl = req.getHeader("referer");
             //
             // ServletUriComponentsBuilder.fromRequestUri(request).replacePath(null).build()
             // .toUriString();
@@ -129,7 +129,7 @@ public class AuthController {
     }
 
     @PostMapping("/savePassword")
-    private ResponseEntity<ResponseObject> savePassword(@Valid @RequestBody PasswordForm passwordForm) {
+    private ResponseEntity<ResponseObject> savePassword(@RequestBody PasswordForm passwordForm) {
         String result = userService.validatePasswordResetToken(passwordForm.getToken());
 
         if (result != null) {
