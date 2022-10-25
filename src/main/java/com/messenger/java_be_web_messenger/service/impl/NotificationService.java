@@ -21,68 +21,62 @@ import com.messenger.java_be_web_messenger.service.INotificationService;
 @Service
 public class NotificationService implements INotificationService {
 
-    @Autowired
-    private SimpMessagingTemplate simpMessagingTemplate;
+	@Autowired
+	private SimpMessagingTemplate simpMessagingTemplate;
 
-    @Autowired
-    SimpUserRegistry simpUserRegistry;
+	@Autowired
+	SimpUserRegistry simpUserRegistry;
 
-    @Autowired
-    UserService userService;
+	@Autowired
+	UserService userService;
 
-    @Override
-    public boolean sendNotifiAllUserFromSystem(NotificationForm notificationForm) {
-        List<String> listUserOnl = getAllUser();
-        listUserOnl
-                .forEach(sub -> simpMessagingTemplate.convertAndSendToUser(sub, "/notifi-all/message",
-                        notificationForm));
-        return true;
-    }
+	@Override
+	public boolean sendNotifiAllUserFromSystem(NotificationForm notificationForm) {
+		List<String> listUserOnl = getAllUser();
+		listUserOnl.forEach(
+				sub -> simpMessagingTemplate.convertAndSendToUser(sub, "/notifi-all/message", notificationForm));
+		return true;
+	}
 
-    @Override
-    public List<String> getAllUserExceptMe(Long id_me) {
-        UserDTO user = userService.getMe(id_me);
+	@Override
+	public List<String> getAllUserExceptMe(Long id_me) {
+		UserDTO user = userService.getMe(id_me);
 
-        List<String> subscribers = simpUserRegistry.getUsers().stream()
-                .map(SimpUser::getName)
-                .filter(name -> !user.getUsername().equals(name))
-                .collect(Collectors.toList());
-        return subscribers;
-    }
+		List<String> subscribers = simpUserRegistry.getUsers().stream().map(SimpUser::getName)
+				.filter(name -> !user.getUsername().equals(name)).collect(Collectors.toList());
+		return subscribers;
+	}
 
-    @Override
-    public List<String> getAllUser() {
-        List<String> subscribers = simpUserRegistry.getUsers().stream()
-                .map(SimpUser::getName)
-                .collect(Collectors.toList());
+	@Override
+	public List<String> getAllUser() {
+		List<String> subscribers = simpUserRegistry.getUsers().stream().map(SimpUser::getName)
+				.collect(Collectors.toList());
 
-        return subscribers;
-    }
+		return subscribers;
+	}
 
-    @Override
-    public boolean sendNotifiSpecificUserFromSystem(NotificationForm notificationForm) {
-        UserDTO user = userService.getMe(notificationForm.getReceiverId());
-        System.out.println("Thong bao da duc gui");
-        simpMessagingTemplate.convertAndSendToUser(user.getUsername(), "/notifi-specific",
-                notificationForm);
-        return true;
-    }
+	@Override
+	public boolean sendNotifiSpecificUserFromSystem(NotificationForm notificationForm) {
+		UserDTO user = userService.getMe(notificationForm.getReceiverId());
+		System.out.println("Thong bao da duc gui");
+		simpMessagingTemplate.convertAndSendToUser(user.getUsername(), "/notifi-specific", notificationForm);
+		return true;
+	}
 
-    @Override
-    public NotificationDTO testNotifi(NotificationForm notificationForm) {
-        UserDTO user = userService.getMe(notificationForm.getReceiverId());
-        UserDTO sender = userService.getMe(notificationForm.getSenderId());
+	@Override
+	public NotificationDTO handleNotifiAddfriend(NotificationForm notificationForm) {
+		UserDTO user = userService.getMe(notificationForm.getReceiverId());
+		UserDTO sender = userService.getMe(notificationForm.getSenderId());
 
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		LocalDateTime now = LocalDateTime.now();
 
-        NotificationDTO notificationDTO = new NotificationDTO(sender.getFullName(), notificationForm.getMessage(),
-                "https://freetuts.net/public/logo/icon.png", Status.ADDFRIEND, dtf.format(now));
+		NotificationDTO notificationDTO = new NotificationDTO(sender.getFullName(), notificationForm.getMessage(),
+				"https://freetuts.net/public/logo/icon.png", Status.ADDFRIEND, dtf.format(now));
 
-        simpMessagingTemplate.convertAndSendToUser(user.getUsername(), "/private-notifi",
-                notificationDTO);
+		simpMessagingTemplate.convertAndSendToUser(user.getUsername(), "/private-notifi", notificationDTO);
 
-        return notificationDTO;
-    }
+		return notificationDTO;
+	}
 
 }

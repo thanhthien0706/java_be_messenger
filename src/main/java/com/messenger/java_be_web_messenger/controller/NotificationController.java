@@ -10,6 +10,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import com.messenger.java_be_web_messenger.dto.MessageDTO;
+import com.messenger.java_be_web_messenger.dto.NotificationDTO;
 import com.messenger.java_be_web_messenger.dto.UserDTO;
 import com.messenger.java_be_web_messenger.form.NotificationForm;
 import com.messenger.java_be_web_messenger.service.impl.NotificationService;
@@ -18,24 +19,24 @@ import com.messenger.java_be_web_messenger.service.impl.UserService;
 @Controller
 public class NotificationController {
 
-    // @Autowired
-    // private SimpMessagingTemplate simpMessagingTemplate;
+	// @Autowired
+	// private SimpMessagingTemplate simpMessagingTemplate;
 
-    // @Autowired
-    // private UserService userService;
+	// @Autowired
+	// private UserService userService;
 
-    @Autowired
-    NotificationService notificationService;
+	@Autowired
+	NotificationService notificationService;
 
-    @MessageMapping("/application")
-    @SendTo("/all/messages")
-    public MessageDTO send(final Message message) throws Exception {
-        return null;
-    }
+	@MessageMapping("/application")
+	@SendTo("/all/messages")
+	public MessageDTO send(final Message message) throws Exception {
+		return null;
+	}
 
-    @MessageMapping("/private-notifi")
-    public NotificationForm recPrivateNotification(@Payload NotificationForm notificationForm) {
-        notificationService.testNotifi(notificationForm);
-        return notificationForm;
-    }
+	@MessageMapping("/private-notifi")
+	public NotificationDTO recPrivateNotification(@Payload NotificationForm notificationForm) {
+		NotificationDTO result = notificationService.handleNotifiAddfriend(notificationForm);
+		return result;
+	}
 }

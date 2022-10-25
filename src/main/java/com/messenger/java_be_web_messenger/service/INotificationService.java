@@ -9,14 +9,14 @@ import com.messenger.java_be_web_messenger.form.NotificationForm;
 
 public interface INotificationService {
 
-    boolean sendNotifiAllUserFromSystem(NotificationForm notificationForm);
+	boolean sendNotifiAllUserFromSystem(NotificationForm notificationForm);
 
-    boolean sendNotifiSpecificUserFromSystem(NotificationForm notificationForm);
+	boolean sendNotifiSpecificUserFromSystem(NotificationForm notificationForm);
 
-    List<String> getAllUserExceptMe(Long id_me);
+	List<String> getAllUserExceptMe(Long id_me);
 
-    List<String> getAllUser();
+	List<String> getAllUser();
 
-    NotificationDTO testNotifi(NotificationForm notificationForm);
+	NotificationDTO handleNotifiAddfriend(NotificationForm notificationForm);
 
 }

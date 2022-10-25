@@ -14,5 +14,5 @@ public interface NotifiAddFriendRepository extends JpaRepository<NotifiAddfriend
     @Query(nativeQuery = true, value = "SELECT COUNT(*) > 0 FROM notifi_addfriend af WHERE af.receiver_id = :receiver_id AND af.requester_id = :requester_id")
     BigInteger checkExistNotifiAddFriend(Long receiver_id, Long requester_id);
 
-    List<NotifiAddfriendEnity> findByReceiver(Long receiverId);
+    List<NotifiAddfriendEnity> findByReceiverId(Long receiverId);
 }
