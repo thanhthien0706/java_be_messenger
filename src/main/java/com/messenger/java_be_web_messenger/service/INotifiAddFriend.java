@@ -7,7 +7,9 @@ import com.messenger.java_be_web_messenger.entities.NotifiAddfriendEnity;
 import com.messenger.java_be_web_messenger.form.NotifiAddFriendForm;
 
 public interface INotifiAddFriend {
-    NotifiAddFriendDTO save(NotifiAddFriendForm notifiForm);
+	NotifiAddFriendDTO save(NotifiAddFriendForm notifiForm);
 
-    List<NotifiAddFriendDTO> getAllFriendOfMe(Long id);
+	List<NotifiAddFriendDTO> getAllFriendOfMe(Long id);
+
+	Boolean removeNotifiAddfriend(Long idReceiver, Long idRequest);
 }

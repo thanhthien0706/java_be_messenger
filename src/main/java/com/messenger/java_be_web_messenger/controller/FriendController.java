@@ -132,14 +132,24 @@ public class FriendController {
 			@RequestParam("id-friend") Long idFriend, @RequestParam("status") Boolean status) {
 		try {
 			Long id_user = jwtProvider.getUserIdFromToken(jwtTokenFilter.getToken(req));
-			if (status) {
-				// chap nhan
+			if (id_user != null) {
+				if (status) {
+					// chap nhan
+				}
+				boolean resultDelete = notifiAddFriendService.removeNotifiAddfriend(id_user, idFriend);
+				if (resultDelete) {
+					return ResponseEntity.status(HttpStatus.OK)
+							.body(new ResponseObject(true, "Delete notification successfully", ""));
+				}
+			} else {
+				return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+						.body(new ResponseObject(false, "User not login", ""));
 			}
-			// khong chap nhan
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.body(new ResponseObject(false, "Handle addfriend false", ""));
 	}
 
 }

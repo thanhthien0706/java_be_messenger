@@ -3,6 +3,8 @@ package com.messenger.java_be_web_messenger.service.impl;
 import java.math.BigInteger;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,5 +59,17 @@ public class NotifiAddFriendService implements INotifiAddFriend {
 		List<NotifiAddfriendEnity> listNotifiFriend = notifiAddFriendRepository.findByReceiverId(id);
 		List<NotifiAddFriendDTO> listResult = notifiAddFriendConvert.toListDto(listNotifiFriend);
 		return listResult;
+	}
+
+	@Override
+	@Transactional
+	public Boolean removeNotifiAddfriend(Long idReceiver, Long idRequest) {
+		long deleteResult = notifiAddFriendRepository.deleteByReceiverIdAndRequesterId(idReceiver, idRequest);
+		System.out.println("Trang thai xoa" + deleteResult);
+		if (deleteResult == 1) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
