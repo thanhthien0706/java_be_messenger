@@ -24,28 +24,26 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "conversations")
 public class ConversationEntity extends BaseEntity {
-    @Column
-    @NotBlank
-    @Size(min = 5)
-    private String title;
+	@Column
+	private String title;
 
-    @ManyToOne
-    @JoinColumn(name = "creator_id", insertable = false, updatable = false)
-    private UserEntity userCreator;
+	@ManyToOne
+	@JoinColumn(name = "creator_id")
+	private UserEntity userCreator;
 
-    @Column
-    private String channel_id;
+	@Column
+	private String channelId;
 
-    @Column
-    @Lob
-    private String avatar;
+	@Column
+	@Lob
+	private String avatar;
 
-    @Column
-    private String description;
+	@Column
+	private String description;
 
-    @Column
-    private Boolean isBlocked;
+	@Column
+	private Boolean isBlocked;
 
-    @OneToMany(mappedBy = "conversation", fetch = FetchType.LAZY)
-    private List<MessageEntity> messages;
+	@OneToMany(mappedBy = "conversation", fetch = FetchType.LAZY)
+	private List<MessageEntity> messages;
 }

@@ -19,16 +19,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "participants")
-public class ParticapantEntity extends BaseEntity {
-    @ManyToOne
-    @JoinColumn(name = "conversation_id", insertable = false, updatable = false)
-    private ConversationEntity conversation;
+public class ParticipantEntity extends BaseEntity {
+	@ManyToOne
+	@JoinColumn(name = "conversation_id")
+	private ConversationEntity conversation;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    private UserEntity user;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private UserEntity user;
 
-    @Column
-    @Enumerated(EnumType.STRING)
-    private TypeGroup type;
+	@Column
+	@Enumerated(EnumType.STRING)
+	private TypeGroup type;
 }

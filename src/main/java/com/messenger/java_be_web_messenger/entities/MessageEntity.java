@@ -26,21 +26,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "messages")
 public class MessageEntity extends BaseEntity {
-    @Column
-    private String content;
+	@Column
+	private String content;
 
-    @Column
-    @Enumerated(EnumType.STRING)
-    private TypeMessage type;
+	@Column
+	@Enumerated(EnumType.STRING)
+	private TypeMessage type;
 
-    @ManyToOne
-    @JoinColumn(name = "conversation_id", insertable = false, updatable = false)
-    private ConversationEntity conversation;
+	@ManyToOne
+	@JoinColumn(name = "conversation_id")
+	private ConversationEntity conversation;
 
-    @ManyToOne
-    @JoinColumn(name = "sender_id", insertable = false, updatable = false)
-    private UserEntity sender;
+	@ManyToOne
+	@JoinColumn(name = "sender_id")
+	private UserEntity sender;
 
-    @OneToMany(mappedBy = "message", fetch = FetchType.LAZY)
-    private List<AttachmentEntity> attachments;
+	@OneToMany(mappedBy = "message", fetch = FetchType.LAZY)
+	private List<AttachmentEntity> attachments;
 }

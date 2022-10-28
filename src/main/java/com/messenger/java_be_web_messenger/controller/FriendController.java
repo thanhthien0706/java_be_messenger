@@ -21,21 +21,28 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.messenger.java_be_web_messenger.convert.UserConvert;
+import com.messenger.java_be_web_messenger.dto.ConversationDTO;
 import com.messenger.java_be_web_messenger.dto.NotifiAddFriendDTO;
 import com.messenger.java_be_web_messenger.dto.NotifiTextDTO;
+import com.messenger.java_be_web_messenger.dto.ParticipaintDTO;
 import com.messenger.java_be_web_messenger.dto.UserDTO;
 import com.messenger.java_be_web_messenger.entities.NotifiAddfriendEnity;
 import com.messenger.java_be_web_messenger.entities.UserEntity;
+import com.messenger.java_be_web_messenger.entities.enum_type.TypeGroup;
+import com.messenger.java_be_web_messenger.form.ConversationForm;
 import com.messenger.java_be_web_messenger.form.NotifiAddFriendForm;
 import com.messenger.java_be_web_messenger.form.NotifiTextForm;
 import com.messenger.java_be_web_messenger.form.NotificationForm;
+import com.messenger.java_be_web_messenger.form.ParticipantForm;
 import com.messenger.java_be_web_messenger.form.ResponseObject;
 import com.messenger.java_be_web_messenger.jwt.JwtProvider;
 import com.messenger.java_be_web_messenger.jwt.JwtTokenFilter;
+import com.messenger.java_be_web_messenger.service.impl.ConversationService;
 import com.messenger.java_be_web_messenger.service.impl.NotifiAddFriendService;
 import com.messenger.java_be_web_messenger.service.impl.NotifiTextService;
 import com.messenger.java_be_web_messenger.service.impl.NotificationService;
 import com.messenger.java_be_web_messenger.service.impl.UserService;
+import com.messenger.java_be_web_messenger.service.impl.participantService;
 
 @RestController
 @RequestMapping("/api/v1/friend")
@@ -61,6 +68,12 @@ public class FriendController {
 
 	@Autowired
 	NotificationService notificationService;
+
+	@Autowired
+	ConversationService conversationService;
+
+	@Autowired
+	participantService participantService;
 
 	@GetMapping
 	private ResponseEntity<ResponseObject> searchUser(HttpServletRequest req,
@@ -133,14 +146,37 @@ public class FriendController {
 		try {
 			Long id_user = jwtProvider.getUserIdFromToken(jwtTokenFilter.getToken(req));
 			if (id_user != null) {
-				if (status) {
-					// chap nhan
-				}
 				boolean resultDelete = notifiAddFriendService.removeNotifiAddfriend(id_user, idFriend);
-				if (resultDelete) {
-					return ResponseEntity.status(HttpStatus.OK)
-							.body(new ResponseObject(true, "Delete notification successfully", ""));
+				if (!status) {
+					if (resultDelete) {
+						return ResponseEntity.status(HttpStatus.OK)
+								.body(new ResponseObject(true, "Delete notification successfully", ""));
+					}
 				}
+				// chap nhan ket ban
+				ConversationForm conversationForm = new ConversationForm(null, id_user, null, null);
+				ConversationDTO conversationDTO = conversationService.createConversation(conversationForm);
+				if (conversationDTO != null) {
+
+//					Long[] listUser = { id_user, idFriend };
+//					boolean checkStatus = true;
+//					for (Long id : listUser) {
+//						ParticipantForm participantForm = new ParticipantForm(conversationDTO.getId(), id,
+//								TypeGroup.SINGLE);
+//						ParticipaintDTO participaintDTO = participantService.createParticipant(participantForm);
+//
+//						if (participaintDTO == null) {
+//							checkStatus = false;
+//						}
+//					}
+//
+//					if (!checkStatus) {
+					return ResponseEntity.status(HttpStatus.OK)
+							.body(new ResponseObject(true, "Create chat successfully", conversationDTO));
+//					}
+
+				}
+
 			} else {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
 						.body(new ResponseObject(false, "User not login", ""));

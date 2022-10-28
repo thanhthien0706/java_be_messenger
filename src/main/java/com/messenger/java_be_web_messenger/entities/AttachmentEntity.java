@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "attachments")
 public class AttachmentEntity extends BaseEntity {
     @ManyToOne
-    @JoinColumn(name = "message_id", insertable = false, updatable = false)
+    @JoinColumn(name = "message_id")
     private MessageEntity message;
 
     @Lob
