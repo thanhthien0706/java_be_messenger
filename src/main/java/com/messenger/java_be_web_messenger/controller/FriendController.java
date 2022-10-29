@@ -153,27 +153,30 @@ public class FriendController {
 								.body(new ResponseObject(true, "Delete notification successfully", ""));
 					}
 				}
+
+				System.out.println("Xoa thong bao ket ban" + resultDelete);
+
 				// chap nhan ket ban
 				ConversationForm conversationForm = new ConversationForm(null, id_user, null, null);
 				ConversationDTO conversationDTO = conversationService.createConversation(conversationForm);
 				if (conversationDTO != null) {
 
-//					Long[] listUser = { id_user, idFriend };
-//					boolean checkStatus = true;
-//					for (Long id : listUser) {
-//						ParticipantForm participantForm = new ParticipantForm(conversationDTO.getId(), id,
-//								TypeGroup.SINGLE);
-//						ParticipaintDTO participaintDTO = participantService.createParticipant(participantForm);
-//
-//						if (participaintDTO == null) {
-//							checkStatus = false;
-//						}
-//					}
-//
-//					if (!checkStatus) {
-					return ResponseEntity.status(HttpStatus.OK)
-							.body(new ResponseObject(true, "Create chat successfully", conversationDTO));
-//					}
+					Long[] listUser = { id_user, idFriend };
+					boolean checkStatus = true;
+					for (Long id : listUser) {
+						ParticipantForm participantForm = new ParticipantForm(conversationDTO.getId(), id,
+								TypeGroup.SINGLE);
+						ParticipaintDTO participaintDTO = participantService.createParticipant(participantForm);
+
+						if (participaintDTO == null) {
+							checkStatus = false;
+						}
+					}
+
+					if (checkStatus) {
+						return ResponseEntity.status(HttpStatus.OK)
+								.body(new ResponseObject(true, "Create chat successfully", conversationDTO));
+					}
 
 				}
 
