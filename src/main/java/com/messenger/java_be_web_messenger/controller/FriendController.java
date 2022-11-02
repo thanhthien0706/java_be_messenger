@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.messenger.java_be_web_messenger.convert.UserConvert;
 import com.messenger.java_be_web_messenger.dto.ConversationDTO;
+import com.messenger.java_be_web_messenger.dto.FriendDTO;
 import com.messenger.java_be_web_messenger.dto.NotifiAddFriendDTO;
 import com.messenger.java_be_web_messenger.dto.NotifiTextDTO;
 import com.messenger.java_be_web_messenger.dto.ParticipaintDTO;
@@ -30,6 +31,7 @@ import com.messenger.java_be_web_messenger.entities.NotifiAddfriendEnity;
 import com.messenger.java_be_web_messenger.entities.UserEntity;
 import com.messenger.java_be_web_messenger.entities.enum_type.TypeGroup;
 import com.messenger.java_be_web_messenger.form.ConversationForm;
+import com.messenger.java_be_web_messenger.form.FriendForm;
 import com.messenger.java_be_web_messenger.form.NotifiAddFriendForm;
 import com.messenger.java_be_web_messenger.form.NotifiTextForm;
 import com.messenger.java_be_web_messenger.form.NotificationForm;
@@ -38,6 +40,7 @@ import com.messenger.java_be_web_messenger.form.ResponseObject;
 import com.messenger.java_be_web_messenger.jwt.JwtProvider;
 import com.messenger.java_be_web_messenger.jwt.JwtTokenFilter;
 import com.messenger.java_be_web_messenger.service.impl.ConversationService;
+import com.messenger.java_be_web_messenger.service.impl.FriendService;
 import com.messenger.java_be_web_messenger.service.impl.NotifiAddFriendService;
 import com.messenger.java_be_web_messenger.service.impl.NotifiTextService;
 import com.messenger.java_be_web_messenger.service.impl.NotificationService;
@@ -74,6 +77,9 @@ public class FriendController {
 
 	@Autowired
 	participantService participantService;
+
+	@Autowired
+	FriendService friendService;
 
 	@GetMapping
 	private ResponseEntity<ResponseObject> searchUser(HttpServletRequest req,
@@ -164,13 +170,19 @@ public class FriendController {
 					Long[] listUser = { id_user, idFriend };
 					boolean checkStatus = true;
 					for (Long id : listUser) {
-						ParticipantForm participantForm = new ParticipantForm(conversationDTO.getId(), id,
-								TypeGroup.SINGLE);
+						ParticipantForm participantForm = new ParticipantForm(conversationDTO.getId(), id);
 						ParticipaintDTO participaintDTO = participantService.createParticipant(participantForm);
 
 						if (participaintDTO == null) {
 							checkStatus = false;
 						}
+					}
+
+					FriendDTO dto1 = friendService.addFriend(new FriendForm(id_user, idFriend));
+					FriendDTO dto2 = friendService.addFriend(new FriendForm(idFriend, id_user));
+
+					if (dto1 == null || dto2 == null) {
+						checkStatus = false;
 					}
 
 					if (checkStatus) {

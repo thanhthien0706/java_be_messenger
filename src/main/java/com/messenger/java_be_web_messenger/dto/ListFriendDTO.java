@@ -1,5 +1,7 @@
 package com.messenger.java_be_web_messenger.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MessageDTO extends BaseDTO {
-	private Long conversationId;
-	private Long senderId;
-	private String content;
-	private String type;
+public class ListFriendDTO extends BaseDTO {
+	private UserDTO me;
+	private List<UserDTO> friends;
 }

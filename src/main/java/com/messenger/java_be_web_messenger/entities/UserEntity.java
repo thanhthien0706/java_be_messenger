@@ -10,6 +10,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -27,47 +28,53 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserEntity extends BaseEntity {
 
-    @Column
-    private String username;
+	@Column
+	private String username;
 
-    @Column
-    private String fullName;
+	@Column
+	private String fullName;
 
-    @Column
-    private String avatar;
+	@Column
+	private String avatar;
 
-    @Column
-    private String email;
+	@Column
+	private String email;
 
-    @Column
-    private String phone;
+	@Column
+	private String phone;
 
-    @Column
-    private boolean active = true;
+	@Column
+	private boolean active = true;
 
-    @Column
-    @JsonIgnore
-    private String password;
+	@Column
+	@JsonIgnore
+	private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private RoleEntity role;
+	@ManyToOne
+	@JoinColumn(name = "role_id")
+	private RoleEntity role;
 
-    @ManyToMany(mappedBy = "userContacts")
-    List<ContactEntity> contacts;
+	@ManyToMany(mappedBy = "userContacts")
+	List<ContactEntity> contacts;
 
-    @OneToMany(mappedBy = "userCreator", fetch = FetchType.LAZY)
-    private List<ConversationEntity> conversations;
+	@OneToMany(mappedBy = "userCreator", fetch = FetchType.LAZY)
+	private List<ConversationEntity> conversations;
 
-    @OneToMany(mappedBy = "conversation", fetch = FetchType.LAZY)
-    private List<MessageEntity> sender;
+	@OneToMany(mappedBy = "conversation", fetch = FetchType.LAZY)
+	private List<MessageEntity> sender;
 
-    @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
-    private List<NotifiAddfriendEnity> notifiReceivers;
+	@OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
+	private List<NotifiAddfriendEnity> notifiReceivers;
 
-    @OneToMany(mappedBy = "requester", fetch = FetchType.LAZY)
-    private List<NotifiAddfriendEnity> notifiRequesters;
+	@OneToMany(mappedBy = "requester", fetch = FetchType.LAZY)
+	private List<NotifiAddfriendEnity> notifiRequesters;
 
-    @OneToMany(mappedBy = "receiver")
-    private List<NotifiTextEntity> notifiTexts;
+	@OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
+	private List<NotifiTextEntity> notifiTexts;
+
+	@OneToMany(mappedBy = "friend", fetch = FetchType.LAZY)
+	private List<FriendEntity> friends;
+
+	@OneToOne(mappedBy = "me")
+	private FriendEntity userFriend;
 }

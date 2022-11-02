@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MessageDTO extends BaseDTO {
-	private Long conversationId;
-	private Long senderId;
-	private String content;
-	private String type;
+public class FriendDTO extends BaseDTO {
+	private UserDTO me;
+	private UserDTO friend;
+	private boolean isBlocked;
 }
